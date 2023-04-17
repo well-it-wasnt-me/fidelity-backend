@@ -1,0 +1,7 @@
+vendor/
+.idea/
+composer.lock
+.env
+data/*.png
+data/*.jpeg
+logs/*.log

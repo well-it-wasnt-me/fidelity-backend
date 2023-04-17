@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  php:
+    container_name: mental-space
+    build:
+      context: ./
+    ports:
+      - '9000:9000'
+    volumes:
+      - .:/var/www/mental-space
+
+  nginx:
+    container_name: mental-space_nginx
+    image: nginx:stable-alpine
+    ports:
+      - '8080:80'
+    volumes:
+      - .:/var/www/mental-space
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php

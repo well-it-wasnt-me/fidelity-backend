@@ -1,0 +1,973 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 0csc8ji5m4bpo
+info:
+  title: Fidelity API
+  version: '1.0'
+  description: In this document are described all endpoints present in the software
+  summary: Fidelity System API
+  contact:
+    name: Antonio D'Angelo
+    email: dangeloantonio179@gmail.com
+  termsOfService: 'https://codecanyon.net/licenses/terms/regular'
+  license:
+    name: Codecanyon Regular
+    url: 'https://codecanyon.net/licenses/terms/regular'
+servers:
+  - url: 'http://localhost:8080'
+    description: Developing Server
+tags:
+  - name: Mobile API
+  - name: General
+paths:
+  /mobile/api/points/total:
+    parameters: []
+    get:
+      summary: Return User available points
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: Points Available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User-Points'
+        '401':
+          description: Unauthorized
+      operationId: get-user-points
+      description: Retrieve total user points
+      security:
+        - TOKEN POST LOGIN: []
+      parameters: []
+  '/mobile/api/transactions/list/{limit}':
+    parameters:
+      - schema:
+          type: number
+        name: limit
+        in: path
+        required: true
+        description: how many records to show
+    get:
+      summary: Transactions List
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transactions'
+              examples:
+                Example 1:
+                  value:
+                    rec_id: 20
+                    recipt_date: '2019-08-24 14:15:22'
+                    recipt_status: paid
+                    recipt_amount: 100
+                    user_id: 1
+        '401':
+          description: Unauthorized
+      operationId: transactions-list
+      description: Return X transactions
+      security:
+        - TOKEN POST LOGIN: []
+  '/mobile/api/transactions/detail/{trx_id}':
+    parameters:
+      - schema:
+          type: number
+        name: trx_id
+        in: path
+        required: true
+        description: Transaction ID
+    get:
+      summary: Transaction Detail
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction-Detail'
+      operationId: get-mobile-api-transactions-detail-trx_id
+      description: Retrieve a specific transaction
+      security:
+        - TOKEN POST LOGIN: []
+  /mobile/api/points/list:
+    get:
+      summary: List Points
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Points-List'
+        '401':
+          description: Unauthorized
+      operationId: get-point-list
+      description: Retrieve list of received points and why
+      security:
+        - TOKEN POST LOGIN: []
+  '/mobile/api/product/list/{category_id}':
+    parameters:
+      - schema:
+          type: number
+        name: category_id
+        in: path
+        required: true
+        description: Category ID
+    get:
+      summary: List products of a Category
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product-List-Category'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+      operationId: get-list-category_id
+      description: Retrieve all product of a determinate category
+      security:
+        - TOKEN POST LOGIN: []
+  /mobile/api/product/latest:
+    get:
+      summary: Latest Products
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product-List-Category'
+        '401':
+          description: Unauthorized
+      operationId: get-product-latest
+      description: Return latest 10 added product
+      security:
+        - TOKEN POST LOGIN: []
+      requestBody:
+        content: {}
+  '/mobile/api/product/detail/{prod_id}':
+    parameters:
+      - schema:
+          type: number
+        name: prod_id
+        in: path
+        required: true
+        description: Product ID
+    get:
+      summary: Get Product Info
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product-List-Category'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+      operationId: get-product-detail-prod_id
+      description: Return product specification by ID
+      security:
+        - TOKEN POST LOGIN: []
+  /mobile/api/categories/list:
+    get:
+      summary: List Categories
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Categories-List'
+        '401':
+          description: Unauthorized
+      operationId: get-mobile-api-categories-list
+      description: Return all the registered categories
+      security:
+        - TOKEN POST LOGIN: []
+  /mobile/api/register/transaction:
+    post:
+      summary: Register Stripe Transaction
+      operationId: post-mobile-api-register-transaction
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction_id:
+                    type: integer
+                    x-stoplight:
+                      id: 3areh4uzdgwpg
+        '401':
+          description: Unauthorized
+      security:
+        - TOKEN POST LOGIN: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  x-stoplight:
+                    id: b9efo34xcs55d
+                cart:
+                  type: object
+                  x-stoplight:
+                    id: 3papjlpt8bu7f
+                  properties:
+                    prod_id:
+                      type: integer
+                      x-stoplight:
+                        id: y1zb7tu1w5638
+                    qt:
+                      type: integer
+                      x-stoplight:
+                        id: 7hlc2x5ib4vj5
+        description: ''
+      description: Register a successfull transction made via stripe
+  /mobile/api/prize/latest:
+    get:
+      summary: Latest 10 Inserted Prize
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Latest-10-Prizes'
+        '401':
+          description: Unauthorized
+      operationId: get-mobile-api-prize-latest
+      description: Return the latest 10 prizes inserted
+      security:
+        - TOKEN_POST_LOGIN: []
+  /mobile/api/prize/categories/list:
+    get:
+      summary: Return Active prize Categories
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prize-Categories-List'
+      operationId: get-mobile-api-prize-categories-list
+      description: return all the categories present in the prize categories table
+      security:
+        - TOKEN_POST_LOGIN: []
+  /login:
+    post:
+      summary: User Login
+      operationId: post-login
+      tags:
+        - General
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login-Response'
+        '401':
+          description: Unauthorized
+      requestBody:
+        content: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: email
+          description: User E-Mail Address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: password
+          description: User password
+          required: true
+  '/mobile/api/prize/detail/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+        description: Prize ID
+    get:
+      summary: Return Prize Detail
+      tags:
+        - Mobile API
+      responses: {}
+      operationId: get-mobile-api-prize-detail-id
+      description: Return prize detail
+      security:
+        - TOKEN_POST_LOGIN: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prize-Detail'
+  /register:
+    post:
+      summary: Register new Account
+      operationId: post-register
+      tags:
+        - General
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register-Response'
+      description: registering a new account
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                fname:
+                  type: string
+                  x-stoplight:
+                    id: f2fbzqyl1lqr3
+                  description: User First Name
+                lname:
+                  type: string
+                  x-stoplight:
+                    id: 5gnixe2o1hqbg
+                  description: User Last Name
+                email:
+                  type: string
+                  x-stoplight:
+                    id: mi8hipi4cbq8r
+                password:
+                  type: string
+                  x-stoplight:
+                    id: iqmbvebj40w88
+              required:
+                - fname
+                - lname
+                - email
+                - password
+        description: ''
+  '/mobile/api/prize/claim/{prize_id}':
+    get:
+      summary: Claiming a Prize
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Claiming-Prize'
+      operationId: get-mobile-api-prize-claim-prize_id
+      security:
+        - TOKEN_POST_LOGIN: []
+    parameters:
+      - schema:
+          type: integer
+        name: prize_id
+        in: path
+        required: true
+        description: Prize ID
+  /mobile/api/claims/list:
+    get:
+      summary: List all claimed prizes
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Claim-History'
+      operationId: get-mobile-api-claims-list
+      security:
+        - TOKEN_POST_LOGIN: []
+  '/mobile/api/claim/detail/{claim_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: claim_id
+        in: path
+        required: true
+        description: Claim ID
+    get:
+      summary: Return Claim Details
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Claim-Detail'
+      operationId: get-mobile-api-claim-detail-claim_id
+      security:
+        - TOKEN_POST_LOGIN: []
+  /mobile/api/claim/qr_code:
+    get:
+      summary: Read QR Code
+      tags:
+        - Mobile API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/General-Response'
+        '401':
+          description: Unauthorized
+      operationId: get-mobile-api-claim-qr_code
+      security:
+        - TOKEN_POST_LOGIN: []
+  /mobile/api/profile/update:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Mobile API
+      responses: {}
+      operationId: get-mobile-api-profile-update
+    post:
+      summary: User Profile Update
+      operationId: post-mobile-api-profile-update
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/General-Response'
+      description: Profile update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                f_name:
+                  type: string
+                  x-stoplight:
+                    id: nbp8qxuac2imc
+                l_name:
+                  type: string
+                  x-stoplight:
+                    id: nvkit8i9p65xh
+                password:
+                  type: string
+                  x-stoplight:
+                    id: e7njrauytr115
+                phone_number:
+                  type: string
+                  x-stoplight:
+                    id: 1duaexr04luo2
+                full_addr:
+                  type: string
+                  x-stoplight:
+                    id: yw4xsenwcouje
+components:
+  schemas:
+    User-Points:
+      title: User-Points
+      x-stoplight:
+        id: ueojhx7jr6raz
+      type: object
+      properties:
+        status:
+          type: string
+          x-stoplight:
+            id: v07yucc6ubcpe
+        message:
+          type: string
+          x-stoplight:
+            id: lheu4f9z0fd9u
+        total_points:
+          type: string
+          x-stoplight:
+            id: f9nvq8qu3h722
+    Points-List:
+      title: Points-List
+      x-stoplight:
+        id: 7whzwb9b3ha2o
+      type: object
+      properties:
+        status:
+          type: string
+          x-stoplight:
+            id: urrp3lal36dj2
+        message:
+          type: string
+          x-stoplight:
+            id: 33ic82hcx5t0v
+        list:
+          type: array
+          x-stoplight:
+            id: 79j7mtzy318o5
+          items:
+            $ref: '#/components/schemas/Reason-Points'
+            x-stoplight:
+              id: ag9yi93asmt7f
+    Reason-Points:
+      title: Reason-Points
+      x-stoplight:
+        id: 5y1pxn0a5cn0o
+      type: object
+      properties:
+        point_id:
+          type: integer
+          x-stoplight:
+            id: 2cuhrfqrfnlvt
+        user_id:
+          type: integer
+          x-stoplight:
+            id: h7qho06k1uv5f
+        amount_point:
+          type: integer
+          x-stoplight:
+            id: 578d3s4jvxv32
+        reason:
+          type: string
+          x-stoplight:
+            id: x7i5dl5o710qa
+        date_assignation:
+          type: string
+          x-stoplight:
+            id: 4nmnwhlevgz2v
+          format: date-time
+      examples:
+        - point_id: 20
+          user_id: 10
+          amount_point: 10
+          reason: Account Activation
+          date_assignation: '2019-08-24 14:15:22'
+    Transactions:
+      title: Transactions List
+      x-stoplight:
+        id: z4hd1brgyp5y3
+      type: object
+      properties:
+        rec_id:
+          type: integer
+          x-stoplight:
+            id: qq4xs8le1xle3
+        recipt_date:
+          type: string
+          x-stoplight:
+            id: o9gcsdu919ant
+          format: date-time
+        recipt_status:
+          type: string
+          x-stoplight:
+            id: 0r8ac45h1tc10
+        recipt_amount:
+          type: integer
+          x-stoplight:
+            id: 2v09ce9okb2gx
+        user_id:
+          type: integer
+          x-stoplight:
+            id: 0zostpzygbfgd
+    Transaction-Detail:
+      title: Transaction-Detail
+      x-stoplight:
+        id: l6ml4qobluv8p
+      type: object
+      properties:
+        rec_id:
+          type: integer
+          x-stoplight:
+            id: tp8vj9smor82s
+        recipt_date:
+          type: string
+          x-stoplight:
+            id: 0u7jag6mojf5z
+        recipt_status:
+          type: string
+          x-stoplight:
+            id: j58t7onhrf91p
+        recipt_amount:
+          type: integer
+          x-stoplight:
+            id: jh6o3pa9eov4r
+        quantity:
+          type: integer
+          x-stoplight:
+            id: 3nwtokwjuledl
+        prod_name:
+          type: string
+          x-stoplight:
+            id: uht1ersey1k73
+        prod_descr:
+          type: string
+          x-stoplight:
+            id: vndt3j0d8ra5w
+        prod_price:
+          type: string
+          x-stoplight:
+            id: 8xiszhas1zuwt
+        prod_picture:
+          type: string
+          x-stoplight:
+            id: 6cgyomo5qknuz
+    Product-List-Category:
+      title: Product List Category
+      x-stoplight:
+        id: tbwwr1r539b1w
+      type: object
+      description: model of product per category
+      properties:
+        prod_id:
+          type: integer
+          x-stoplight:
+            id: rtcalx4hb5kgm
+        prod_name:
+          type: string
+          x-stoplight:
+            id: xat19uskhbyyo
+        prod_descr:
+          type: string
+          x-stoplight:
+            id: gs6gymdqtoumd
+        prod_picture:
+          type: string
+          x-stoplight:
+            id: 9d0rmfnjrr0jf
+        prod_price:
+          type: integer
+          x-stoplight:
+            id: xokm19hhawqug
+        cat_id:
+          type: integer
+          x-stoplight:
+            id: vtu2pvdzcnjg7
+        is_active:
+          type: integer
+          x-stoplight:
+            id: d43sdy7apud48
+        quantity:
+          type: integer
+          x-stoplight:
+            id: ce25ochha77lx
+    Categories-List:
+      title: Categories-List
+      x-stoplight:
+        id: utxwnoa4o1yij
+      type: object
+      properties:
+        cat_id:
+          type: integer
+          x-stoplight:
+            id: ggwf0zrn8z3wh
+        cat_name:
+          type: string
+          x-stoplight:
+            id: 45in78swujsog
+        cat_descr:
+          type: string
+          x-stoplight:
+            id: 1uq7njawt9ray
+        cat_picture:
+          type: string
+          x-stoplight:
+            id: 790qyaxbryw7l
+        is_active:
+          type: integer
+          x-stoplight:
+            id: rs1xjagr14mn3
+    Latest-10-Prizes:
+      title: Latest-10-Prizes
+      x-stoplight:
+        id: lp3drvif83te0
+      type: object
+      properties:
+        ip_prod_id:
+          type: integer
+          x-stoplight:
+            id: 9h0xxyofwt3zl
+        prize_name:
+          type: string
+          x-stoplight:
+            id: nwnhzmiv9edz0
+        prize_descr:
+          type: string
+          x-stoplight:
+            id: goi05a3kr5wzf
+        prize_picture:
+          type: string
+          x-stoplight:
+            id: 5v0fpnsw0gz2y
+        prize_points:
+          type: integer
+          x-stoplight:
+            id: i91rr58vqn4wn
+        prize_quantity:
+          type: integer
+          x-stoplight:
+            id: 1o49t2zk13asd
+        prize_cat_id:
+          type: integer
+          x-stoplight:
+            id: sgouxny48dwyz
+        is_active:
+          type: integer
+          x-stoplight:
+            id: qcksden7gcd0j
+    Prize-Categories-List:
+      title: Prize-Categories-List
+      x-stoplight:
+        id: cith1f5wn3k1i
+      type: object
+      properties:
+        p_cat_id:
+          type: integer
+          x-stoplight:
+            id: c3sq9do6qi0ye
+        cat_name:
+          type: string
+          x-stoplight:
+            id: b5x57dgvhm0kn
+        cat_descr:
+          type: string
+          x-stoplight:
+            id: 1sp6ckcas6pal
+        cat_picture:
+          type: string
+          x-stoplight:
+            id: pno95dk2s9hkp
+        is_active:
+          type: integer
+          x-stoplight:
+            id: gahj2bnpfjztu
+    Prize-Detail:
+      title: Prize-Detail
+      x-stoplight:
+        id: i6zhenvi1g68p
+      type: object
+      properties:
+        p_prod_id:
+          type: integer
+          x-stoplight:
+            id: g5pbtuxqn2400
+        prize_name:
+          type: string
+          x-stoplight:
+            id: xi59mwd627jd1
+        prize_descr:
+          type: string
+          x-stoplight:
+            id: cmwen57p02yut
+        prize_picture:
+          type: string
+          x-stoplight:
+            id: 0c2v4zlev4y36
+        prize_points:
+          type: integer
+          x-stoplight:
+            id: td1qh4tsxcn90
+        prize_quantity:
+          type: integer
+          x-stoplight:
+            id: 9fdbip4o1jkvz
+        prize_cat_id:
+          type: integer
+          x-stoplight:
+            id: io24ua2n0wazj
+        is_active:
+          type: integer
+          x-stoplight:
+            id: nrznx4lnqktw4
+    Login-Response:
+      title: Login-Response
+      x-stoplight:
+        id: 42e4li73ucpnh
+      type: object
+      properties:
+        status:
+          type: string
+          x-stoplight:
+            id: ho3u39hlyzkog
+        access_token:
+          type: string
+          x-stoplight:
+            id: c1pp083gpusq1
+        expires_in:
+          type: string
+          x-stoplight:
+            id: mf1kg3wxvllmg
+        token_type:
+          type: string
+          x-stoplight:
+            id: gbew8enj2azxm
+      description: What successfull login return
+    Register-Response:
+      title: Register-Response
+      x-stoplight:
+        id: xrw7ixzjj25nc
+      type: object
+      properties:
+        status:
+          type: string
+          x-stoplight:
+            id: fklgm1t3n8tw5
+        message:
+          type: string
+          x-stoplight:
+            id: nzy1ujo1mabo8
+        user_id:
+          type: integer
+          x-stoplight:
+            id: 7c5oypmaftux8
+      examples:
+        - status: success
+          message: 'Account Created, now you can do login'
+          user_id: 9
+    Claiming-Prize:
+      title: Claiming-Prize
+      x-stoplight:
+        id: ewzomatfk07z2
+      type: object
+      properties:
+        status:
+          type: string
+          x-stoplight:
+            id: 4syii8gkgtwvy
+        message:
+          type: string
+          x-stoplight:
+            id: vechl52u2to63
+    Claim-History:
+      title: Claim-History
+      x-stoplight:
+        id: 16ciwr1sqpo09
+      type: object
+      properties:
+        claim_id:
+          type: integer
+          x-stoplight:
+            id: k714steuh0mfw
+        user_id:
+          type: integer
+          x-stoplight:
+            id: 56urlflipkglq
+        prize_id:
+          type: integer
+          x-stoplight:
+            id: 8z5rcsogi5pq0
+        claim_date:
+          type: string
+          x-stoplight:
+            id: b9kfcgy8blsif
+          format: date-time
+        is_delivered:
+          type: integer
+          x-stoplight:
+            id: jotrawn73i8z6
+          default: 0
+        prize_name:
+          type: string
+          x-stoplight:
+            id: kfuywq73k8yrj
+    Claim-Detail:
+      title: Claim-Detail
+      x-stoplight:
+        id: lvig5nz4a1bb6
+      type: object
+      properties:
+        claim_id:
+          type: integer
+          x-stoplight:
+            id: fnktupeti5gtp
+        user_id:
+          type: integer
+          x-stoplight:
+            id: wv9qjtyijsq92
+        prize_id:
+          type: integer
+          x-stoplight:
+            id: ief88mb53r1d8
+        claim_date:
+          type: string
+          x-stoplight:
+            id: kxtjyrmx88g18
+          format: date-time
+        is_delivered:
+          type: integer
+          x-stoplight:
+            id: y1cjbpw1yqrm4
+        prize_name:
+          type: string
+          x-stoplight:
+            id: hjlgpcad8uf2k
+        prize_descr:
+          type: string
+          x-stoplight:
+            id: c4cu91eavvpay
+        prize_picture:
+          type: string
+          x-stoplight:
+            id: d80vnmangnup5
+        prize_points:
+          type: integer
+          x-stoplight:
+            id: pwcf3mv2gj91f
+    General-Response:
+      title: QR-Code-General
+      x-stoplight:
+        id: gnhqvzdd1kne9
+      type: object
+      properties:
+        status:
+          type: string
+          x-stoplight:
+            id: t4nbh2d3iwjj9
+        message:
+          type: string
+          x-stoplight:
+            id: fxw7rc09pg705
+  securitySchemes:
+    TOKEN_POST_LOGIN:
+      type: http
+      scheme: bearer
+      description: Receive the token after a succefull login
+  requestBodies: {}
+security:
+  - TOKEN_POST_LOGIN: []
